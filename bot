@@ -1,0 +1,29 @@
+
+import telebot
+#from random import sample
+
+token = '6157829694:AAGQ4crNBbsTQpv4Z7P0F43b3CR_GfZvQa8'
+bot = telebot.TeleBot(token)
+
+
+@bot.message_handler(commands=["start"])
+def start(m):
+    bot.send_message(m.chat.id, 'Соединение установлено')
+
+
+#@bot.message_handler(content_types=["text"])
+#def handle_text(message):
+#    bot.send_message(message.chat.id, 'Ваш текст: ' + message.text)
+
+
+#@bot.message_handler(content_types=["text"])
+#def grp(message):
+ #   if message == 'Сгенерировать пароль':
+ #       p = '1234567890qwertyuiopasdfghjklzxcvbnm|+=-_)({[]}:;/?.>,<!@#$%^&*~`'
+ #       s = sample(p, 10)
+ #       s = str(s)
+ #   bot.send_message(message.chat.id, 'Ваш пароль: ' + s)
+
+
+
+bot.polling(none_stop=True, interval=0)

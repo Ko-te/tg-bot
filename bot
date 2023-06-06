@@ -11,18 +11,18 @@ def start(m):
     bot.send_message(m.chat.id, 'Соединение установлено')
 
 
-#@bot.message_handler(content_types=["text"])
-#def handle_text(message):
-#    bot.send_message(message.chat.id, 'Ваш текст: ' + message.text)
+@bot.message_handler(content_types=["text"])
+def handle_text(message):
+  bot.send_message(message.chat.id, 'Ваш текст: ' + message.text)
 
 
-#@bot.message_handler(content_types=["text"])
-#def grp(message):
- #   if message == 'Сгенерировать пароль':
- #       p = '1234567890qwertyuiopasdfghjklzxcvbnm|+=-_)({[]}:;/?.>,<!@#$%^&*~`'
- #       s = sample(p, 10)
- #       s = str(s)
- #   bot.send_message(message.chat.id, 'Ваш пароль: ' + s)
+@bot.message_handler(content_types=["text"])
+def grp(message):
+   if message == 'Сгенерировать пароль':
+       p = '1234567890qwertyuiopasdfghjklzxcvbnm|+=-_)({[]}:;/?.>,<!@$%^&*~`'
+       s = sample(p, 10)
+       s = str(s)
+    bot.send_message(message.chat.id, 'Ваш пароль: ' + s)
 
 
 

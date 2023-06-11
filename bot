@@ -1,29 +1,43 @@
-
+import datetime as dt
+from telebot import types
 import telebot
-#from random import sample
+import random
+import requests
+from bs4 import BeautifulSoup
 
 token = '6157829694:AAGQ4crNBbsTQpv4Z7P0F43b3CR_GfZvQa8'
 bot = telebot.TeleBot(token)
 
+url = 'https://ru.investing.com/currencies/'
+response = requests.get(url)
+print(response)
+bs = BeautifulSoup(response.text,"lxml")
 
 @bot.message_handler(commands=["start"])
-def start(m):
-    bot.send_message(m.chat.id, 'Соединение установлено')
+def start(message):
+    now = dt.datetime.now()
+    x = ['Соединение установлено !', 'Hello! ', 'Hello User！', 'HI！', 'Привет！', 'Привет пользователь！', '你們好! ',
+         '¡Hola! ']
+    x = random.choice(x)
+    bot.send_message(message.chat.id, x + f'Время по МСК: {now}')
 
 
-@bot.message_handler(content_types=["text"])
-def handle_text(message):
-  bot.send_message(message.chat.id, 'Ваш текст: ' + message.text)
+@bot.message_handler(commands=['button'])
+def buttons(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton("€/₽ EUR/RUB")
+    btn2 = types.KeyboardButton('$/₽ USD/RUB')
+    markup.add(btn1, btn2)
+    bot.send_message(message.from_user.id, " Выберите курс валюты: ", reply_markup=markup)
 
 
-@bot.message_handler(content_types=["text"])
-def grp(message):
-   if message == 'Сгенерировать пароль':
-       p = '1234567890qwertyuiopasdfghjklzxcvbnm|+=-_)({[]}:;/?.>,<!@$%^&*~`'
-       s = sample(p, 10)
-       s = str(s)
-    bot.send_message(message.chat.id, 'Ваш пароль: ' + s)
-
-
+@bot.message_handler(content_types='text')
+def message_reply(message):
+    if message.text == '€/₽ EUR/RUB':
+        euro = bs.find('td', 'pid-1691-high')
+        bot.send_message(message.chat.id, f'1€ = {euro.text} ₽')
+    elif message.text == '$/₽ USD/RUB':
+        usd = bs.find('td', 'pid-2186-high')
+        bot.send_message(message.chat.id, f'1$ = {usd.text} ₽')
 
 bot.polling(none_stop=True, interval=0)
